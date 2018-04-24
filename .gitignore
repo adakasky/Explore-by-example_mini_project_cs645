@@ -1,3 +1,22 @@
+# .tex auxiliaries
+*.bbl
+*.blg
+*.synctex.gz
+*.aux
+*.out
+
+# IntelliJ
+.idea/
+
+# data files
+log/
+data/
+temp/
+models/
+checkpoints/
+cvpr/
+readings/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -20,7 +39,6 @@ lib64/
 parts/
 sdist/
 var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -43,7 +61,7 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*.cover
+*,cover
 .hypothesis/
 
 # Translations
@@ -67,7 +85,7 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter Notebook
+# IPython Notebook
 .ipynb_checkpoints
 
 # pyenv
@@ -76,26 +94,34 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
-# SageMath parsed files
-*.sage.py
-
 # dotenv
 .env
 
 # virtualenv
-.venv
 venv/
 ENV/
 
 # Spyder project settings
 .spyderproject
-.spyproject
 
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
+dev_v1.1.json/
+test_public_v1.1.json/
+train_v1.1.json/
+stanford-ner-2016-10-31/
+stanford-parser-full-2016-10-31/
+stanford-postagger-2016-10-31/
+wiki_sg/
+data_exapmle.txt
+feature-token-index/
+feature-output-files/
+dev_v1.1/
+input_data/
+src/dev_v1.1.json
+src/content_parser.py
+src/train_v1.1.json
+src/hypothesis/
+src/query/
+src/reference/
