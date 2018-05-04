@@ -1,32 +1,11 @@
 
 # coding: utf-8
 
-'''
-	def __init__(self, database, user, query, keys):
-
-		self.keys = keys
-		self.conn = psycopg2.connect("dbname=" + database +  " user="+user)
-		self.cur = self.conn.cursor()
-		self.cur.execute(query)
-		self.conn.commit()
-		self.cache = np.array(self.cur.fetchall())
-
-	def data_setup(self, false_query, size=3):
-		true_sample = self.cache[np.random.randint(len(self.cache), size=size)]
-		self.cur.execute(false_query)
-		self.false_result = np.array(self.cur.fetchall())
-		self.conn.commit()
-		false_sample = self.false_result[np.random.randint(len(self.false_result), size=size)]
-		return self.cache, true_sample, false_sample
-
-'''
-
 import pandas as pd
 import numpy as np
 from sklearn import tree
 from sklearn.cluster import KMeans
 
-#normalize = lambda a: (a - a.min()) / (a.max() - a.min()) * 100
 
 class Sampler:
 	# query format: {'rowc': (lower, upper), 'colc': (lower, upper) ....}
@@ -48,7 +27,7 @@ class Sampler:
 	'''
 	@clf: a decision tree classifier 
 	@training_data: dataset to be sampled
-	@k: number of iteration
+	@k: number of cluster
 	@y: distance 
 	'''
 	# sample(tree, false_negative, clusters, y)
