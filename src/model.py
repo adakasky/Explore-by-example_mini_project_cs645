@@ -17,6 +17,8 @@ class ClusterTreeNode(object):
         self.k = k
         self.data = data
         self.rel = rel
+        self.relevant = []
+        self.irrelevant = []
     
     def sample(self):
         self.cluster = KMeans(n_clusters=self.k, random_state=0)
@@ -30,8 +32,6 @@ class ClusterTreeNode(object):
             (self.clustering[i] - centroids[i]) ** 2, axis=1)))] for i in range(self.k)])
     
     def split(self):
-        self.relevant = []
-        self.irrelevant = []
         relevance = (self.samples[:, 0] > 39) & (self.samples[:, 0] < 77) \
                     & (self.samples[:, 1] > 25) & (self.samples[:, 1] < 56)
         self.relevant.extend([ClusterTreeNode(c, rel=True, k=4)
@@ -79,6 +79,7 @@ if __name__ == '__main__':
     data_path = "../data/sdss_100k.csv.gz"
     columns = ['rowc', 'colc', 'ra', 'field', 'fieldid', 'dec']
     data = np.array(load_data(data_path, columns))
+    data = (data - data.min(axis=0)) / (data.max(axis=0) - data.min(axis=0)) * 100
     
     ground_truth = data[(data[:, 0] > 39) & (data[:, 0] < 77) & (data[:, 1] > 25) & (data[:, 1] < 56)]
     root = ClusterTreeNode(data, k=4)
