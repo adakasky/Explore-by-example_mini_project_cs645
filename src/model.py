@@ -32,9 +32,8 @@ class ClusterTreeNode(object):
             (self.clustering[i] - centroids[i]) ** 2, axis=1)))] for i in range(self.k)])
     
     def split(self):
-        relevance = (self.samples[:, 0] > 39) & (self.samples[:, 0] < 77) \
-                    & (self.samples[:, 1] > 25) & (self.samples[:, 1] < 56)
-        self.relevant.extend([ClusterTreeNode(c, rel=True, k=4)
+        relevance = query(self.samples)
+        self.relevant.extend([ClusterTreeRelNode(c, rel=True, k=4)
                               for i, c in enumerate(self.clustering) if relevance[i]])
         self.irrelevant.extend([ClusterTreeIrrNode(c, rel=False, k=4)
                                 for i, c in enumerate(self.clustering) if not relevance[i]])
@@ -47,8 +46,7 @@ class ClusterTreeRelNode(ClusterTreeNode):
     def sample(self):  # sample around boundaries and shrink the boundaries
         boundary_idx = np.hstack([self.data.argmin(axis=0), self.data.argmax(axis=0)])
         self.samples = self.data[boundary_idx]
-        relevance = (self.samples[:, 0] > 39) & (self.samples[:, 0] < 77) \
-                    & (self.samples[:, 1] > 25) & (self.samples[:, 1] < 56)
+        relevance = query(self.samples)
         del_idx = boundary_idx[np.where(~relevance)]
         self.data = np.delete(self.data, del_idx, axis=0)
         self.boundaries = [{'min': self.data.min(axis=0), 'max': self.data.max(axis=0)}]
@@ -59,8 +57,7 @@ class ClusterTreeIrrNode(ClusterTreeNode):
         super(ClusterTreeIrrNode, self).__init__(data, rel, k)
     
     def split(self):
-        relevance = (self.samples[:, 0] > 39) & (self.samples[:, 0] < 77) \
-                    & (self.samples[:, 1] > 25) & (self.samples[:, 1] < 56)
+        relevance = query(self.samples)
         self.relevant.extend([ClusterTreeFNNode(c, rel=True, k=self.k)
                               for i, c in enumerate(self.clustering) if relevance[i]])
         self.irrelevant.extend([ClusterTreeIrrNode(c, rel=False, k=self.k)
@@ -75,11 +72,15 @@ class ClusterTreeFNNode(ClusterTreeNode):
         pass
 
 
+def query(data):
+    return (data[:, 0] > 39) & (data[:, 0] < 77) & (data[:, 1] > 25) & (data[:, 1] < 56)
+
+
 if __name__ == '__main__':
     data_path = "../data/sdss_100k.csv.gz"
     columns = ['rowc', 'colc', 'ra', 'field', 'fieldid', 'dec']
     data = np.array(load_data(data_path, columns))
     data = (data - data.min(axis=0)) / (data.max(axis=0) - data.min(axis=0)) * 100
     
-    ground_truth = data[(data[:, 0] > 39) & (data[:, 0] < 77) & (data[:, 1] > 25) & (data[:, 1] < 56)]
+    ground_truth = data[query(data)]
     root = ClusterTreeNode(data, k=4)
