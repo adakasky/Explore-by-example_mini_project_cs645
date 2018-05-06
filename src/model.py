@@ -70,6 +70,7 @@ class ClusterTreeFNNode(ClusterTreeNode):
     def sample(self):  # sample around centroid and expand the boundaries
         pass
 
+
 def query(data):
     return (data[:, 0] > 39) & (data[:, 0] < 77) & (data[:, 1] > 25) & (data[:, 1] < 56)
 
